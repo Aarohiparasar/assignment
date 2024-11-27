@@ -1,0 +1,36 @@
+
+.virtual-table {
+    width: 100%;
+    margin: 20px auto;
+  }
+  
+  .table-container {
+    position: relative;
+    overflow-y: auto;
+  }
+  
+  .table-container > div {
+    position: relative;
+    width: 100%;
+
+  }
+  
+  .table-container div p {
+    margin: 5px;
+    font-size: 14px;
+  }
+  .table-data:hover{
+    transform: scale(1.02);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: whitesmoke;
+  }
+  .table-data>h2{
+    color: blue;
+  }
+  .table-container div {
+    border-bottom: 1px solid #943030;
+    padding: 5px;
+    height:fit-content
+  }
+  
+  
