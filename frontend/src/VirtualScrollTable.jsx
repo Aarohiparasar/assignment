@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import "./VirtualScrollTable.css";
+
 const ROW_HEIGHT = 200;
 const VISIBLE_ROWS = 20;
 
 const VirtualScrollTable = () => {
   const containerRef = useRef(null);
   const [scrollOffset, setScrollOffset] = useState(0);
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const {
     data,
@@ -32,6 +34,14 @@ const VirtualScrollTable = () => {
 
   const flatData = data?.pages.flatMap((page) => page.data) || [];
 
+  const sortedData = [...flatData].sort((a, b) => {
+    if (sortDirection === "asc") {
+      return a.orderAmount - b.orderAmount;
+    } else {
+      return b.orderAmount - a.orderAmount;
+    }
+  });
+
   const handleScroll = () => {
     if (containerRef.current) {
       const offset = containerRef.current.scrollTop;
@@ -48,6 +58,10 @@ const VirtualScrollTable = () => {
     }
   };
 
+  const toggleSortDirection = () => {
+    setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+  };
+
   if (isError) {
     return <div>Error: {error.message}</div>;
   }
@@ -60,14 +74,45 @@ const VirtualScrollTable = () => {
 
   return (
     <div className="virtual-table">
+     
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          color: "blue",
+          gap: "20rem",
+        }}
+      >
+        <h1>Customer</h1>
+        <h1>
+          Amount
+          <button
+            onClick={toggleSortDirection}
+            style={{
+              marginLeft: "10px",
+              cursor: "pointer",
+              padding: "5px 10px",
+              background: "blue",
+              color: "white",
+              borderRadius: "5px",
+              border: "none",
+            }}
+          >
+            {sortDirection === "asc" ? "↑" : "↓"}
+          </button>
+        </h1>
+        <h1>Status</h1>
+      </div>
+
       <div
         ref={containerRef}
         className="table-container"
         onScroll={handleScroll}
         style={{ height: `${VISIBLE_ROWS * ROW_HEIGHT}px`, overflowY: "auto" }}
       >
-        <div style={{ height: `${flatData.length * ROW_HEIGHT}px` }}>
-          {flatData.map((row, index) => (
+        <div style={{ height: `${sortedData.length * ROW_HEIGHT}px` }}>
+          {sortedData.map((row, index) => (
             <div
               key={row.id}
               style={{
@@ -77,12 +122,16 @@ const VirtualScrollTable = () => {
                 width: "100%",
                 margin: "20px",
                 boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "24rem",
               }}
               className="table-data"
             >
-              <h2>Customer: {row.customerName}</h2>
-              <h2 style={{ color: "gray" }}>Amount: {row.orderAmount}</h2>
-              <h3 style={{ color: "gray" }}>Status: {row.status}</h3>
+              <h2>{row.customerName}</h2>
+              <h2 style={{ color: "gray" }}>{row.orderAmount}</h2>
+              <h3 style={{ color: "gray" }}>{row.status}</h3>
             </div>
           ))}
         </div>
