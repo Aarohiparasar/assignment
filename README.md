@@ -14,4 +14,4 @@ The implementation prioritizes performance, consistency, and scalability while m
     Indexed queries for faster database lookups.
     Limited result sizes to reduce memory usage and improve response times.
 
-Deployed LINK-https://magical-faun-91126d.netlify.app/
+Deployed LINK-https://eclectic-semifreddo-60d6f1.netlify.app/
